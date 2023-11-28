@@ -4,11 +4,11 @@ This repo contains the code samples from my personal reading of the book *[Terra
 
 
 
-## Looking for the 1st, 2nd, or 3rd edition?
+## Looking for the Original Sample code for the 3rd edition?
 
-*Terraform: Up & Running* now on its **3rd edition**. If you're looking for the original code examples for the 3rd editions by the Author, please see the following branches:
+*Terraform: Up & Running* now on its **3rd edition**. If you're looking for the original code examples for the 3rd editions by the Author, please see the following branch:
 
-* [3rd-edition branch](https://github.com/brikis98/terraform-up-and-running-code/tree/3rd-edition).
+* [Terraform: Up and Running 3rd-edition branch](https://github.com/brikis98/terraform-up-and-running-code/tree/3rd-edition).
 
 
 
