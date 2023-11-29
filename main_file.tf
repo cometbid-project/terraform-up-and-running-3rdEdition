@@ -10,7 +10,7 @@ resource "aws_launch_configuration" "example" {
                 nohup busybox httpd -f -p ${var.server_port} &
                 EOF
 
-  #Required when using a launch configuration with an autoscaliing group
+  #Added to ensure security groups are destriyed and recreated each time
   lifecycle {
     create_before_destroy = true
   }
