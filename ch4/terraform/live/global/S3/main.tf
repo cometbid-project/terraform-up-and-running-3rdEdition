@@ -7,37 +7,44 @@ terraform {
       version = "~> 5.0"
     }
   }
-
   /*
   backend "s3" {
     # This backend configuration is filled in automatically at test time by Terratest. If you wish to run this example
     # manually, uncomment and fill in the config below.
 
+    bucket         = "terraform-up-and-running-state-so1"
     key            = "global/s3/terraform.tfstate"
-  } */
+    region         = "us-east-2"
+    dynamodb_table = "terraform-up-and-running-locks"
+    encrypt        = true
+  }
+  */
 }
+
 
 provider "aws" {
   region = "us-east-2"
 }
 
 resource "aws_s3_bucket" "terraform_state" {
+
   bucket = var.bucket_name
 
   # Prevent accidental deletion of this S3 bucket
   # lifecycle {
   #   prevent_destroy = true
-  #}
+  # }
 
   // This is only here so we can destroy the bucket as part of automated tests. You should not copy this for production
   // usage
   force_destroy = true
+
 }
 
-# Enable versioning so you can see the full revision history of your state files
+# Enable versioning so you can see the full revision history of your
+# state files
 resource "aws_s3_bucket_versioning" "enabled" {
   bucket = aws_s3_bucket.terraform_state.id
-
   versioning_configuration {
     status = "Enabled"
   }
@@ -67,30 +74,9 @@ resource "aws_dynamodb_table" "terraform_locks" {
   name         = var.table_name
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
+
   attribute {
     name = "LockID"
     type = "S"
   }
-}
-
-variable "bucket_name" {
-  description = "The name of the S3 bucket. Must be globally unique."
-  type        = string
-  default     = "terraform-up-and-running-state-so1"
-}
-
-variable "table_name" {
-  description = "The name of the DynamoDB table. Must be unique in this AWS account."
-  type        = string
-  default     = "terraform-up-and-running-locks"
-}
-
-output "s3_bucket_arn" {
-  value       = aws_s3_bucket.terraform_state.arn
-  description = "The ARN of the S3 bucket"
-}
-
-output "dynamodb_table_name" {
-  value       = aws_dynamodb_table.terraform_locks.name
-  description = "The name of the DynamoDB table"
 }
